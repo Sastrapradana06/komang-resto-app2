@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  color: black;
+  background-color: #ffffff;
+  /* background-color: #242424; */
+}
+
+svg {
+  font-size: 10px;
+}
+
