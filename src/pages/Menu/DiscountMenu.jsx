@@ -88,9 +88,9 @@ export default function DiscountMenu() {
                         return (
                             <div className="w-[180px] h-[220px]  flex-none rounded-xl p-2 bg-white relative" key={i}>
                                 <img className="w-full h-[130px] object-cover rounded-xl" src={menu.image} />
-                                <div className=" w-max py-[7px] px-3 rounded-2xl bg-wt -mt-10 bg-wt relative left-1">
+                                {/* <div className=" w-max py-[7px] px-3 rounded-2xl bg-wt -mt-10 bg-wt relative left-1">
                                     <p className="text-[.7rem] font-bold">{menu.tersedia}</p>
-                                </div>
+                                </div> */}
                                 <div className="w-full mt-4 flex items-center justify-between">
                                     <p className="text-[.7rem] font-bold">{menu.namaMakanan}</p>
                                 </div>

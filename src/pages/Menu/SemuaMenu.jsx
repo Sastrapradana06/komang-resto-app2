@@ -67,14 +67,14 @@ export default function SemuaMenu() {
                 <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(softDrinks)}>Non Coffe</button>
                 <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(jusTea)}>Jus / Tea</button>
             </div>
-            <div className="w-full flex flex-wrap p-2 justify-center gap-2 mb-16">
+            <div className="w-[100%] flex flex-wrap justify-center gap-1 mb-16">
                 {semuaMenu.map((menu, i) => {
                     return (
                         <div className="w-[160px] h-[220px]  flex-none rounded-xl p-2 bg-white relative" key={i}>
                             <img className="w-full h-[130px] object-cover rounded-xl" src={menu.image}/>
-                            <div className=" w-max py-[7px] px-3 rounded-2xl bg-wt -mt-10 bg-wt relative left-1">
+                            {/* <div className=" w-max py-[7px] px-3 rounded-2xl bg-wt -mt-10 bg-wt relative left-1">
                                 <p className="text-[.7rem] font-bold">{menu.tersedia}</p>
-                            </div>
+                            </div> */}
                             <div className="w-full mt-4 flex items-center justify-between">
                                 <p className="text-[.7rem] font-bold">{menu.namaMakanan}</p>
                             </div>
