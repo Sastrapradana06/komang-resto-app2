@@ -8,83 +8,102 @@ import { useEffect, useState } from "react";
 
 export default function Cart() {
     const [isAlert, setIsAlert] = useState(false)
-    const [penguranganHarga, setPenguranganHarga] = useState([])
-    const [tambahanHarga, setTambahanHarga] = useState([])
-    // const [currentTotal, setCurrentTotal] = useState(0);
-    const [subTotal, setSubTotal] = useState(0)
-    const [pajak, setPajak] = useState(0)
-    const [diskon, setDiskon] = useState(0)
-    const [total, setTotal] = useState(0)
-    const [keranjang, editKeranjang, statusTambahan, editStatusTambahan, getSubTotal, editSubTotal] = useAppStore((state) => [
+    const [penguranganHarga] = useState([])
+    const [tambahanHarga] = useState([])
+    const [keranjang, editKeranjang, statusTambahan, editStatusTambahan, getSubTotal, editSubTotal, getPajak, editPajak, getDiskon, editDiskon, getTotal, editTotal, getHarga, editGetHarga, getHargaDiskon, editGetHargaDiskon, metodePembayaran] = useAppStore((state) => [
         state.keranjang,
         state.editKeranjang,
         state.statusTambahan,
         state.editStatusTambahan,
         state.getSubTotal,
-        state.editSubTotal
+        state.editSubTotal,
+        state.getPajak,
+        state.editPajak,
+        state.getDiskon,
+        state.editDiskon,
+        state.getTotal,
+        state.editTotal,
+        state.getHarga,
+        state.editGetHarga,
+        state.getHargaDiskon,
+        state.editGetHargaDiskon,
+        state.metodePembayaran
     ], shallow)
 
-    console.log(getSubTotal);
+    console.log({metodePembayaran});
 
 
     useEffect(() => {
-        const filterTotalKeranjang = keranjang.filter((menu) => menu.total != 1)
-        // console.log(filterTotalKeranjang);
-        if (keranjang.length != 0) {
-            if (filterTotalKeranjang.length == 0) {
-                const filteredkeranjang = keranjang.map((menu) => {
-                    return menu.harga
-                })
-                const filterDiskon = keranjang.filter((menu) => {
-                    return menu.diskon !== 0
-                })
+        if (getHarga.length != 0) {
+            const filterDiskon = keranjang.filter((menu) => {
+                return menu.diskon !== 0
+            })
 
-                const subtotal = filteredkeranjang.reduce((p, x) => p + x)
-                const formattedSubtotal = subtotal.toLocaleString("id-ID");
-                setSubTotal(formattedSubtotal)
-                editSubTotal(formattedSubtotal)
+            const subtotal = getHarga.reduce((p, x) => p + x)
+            const formattedSubtotal = subtotal.toLocaleString("id-ID");
+            editSubTotal(formattedSubtotal)
 
-                const pajak = subtotal / 10
-                setPajak(pajak.toLocaleString("id-ID"))
+            const pajak = subtotal / 10
+            editPajak(pajak.toLocaleString("id-ID"))
 
-                if(filterDiskon.length != 0) {
-                    const getDiskon = filterDiskon.map((menu) => menu.diskon).reduce((a, b) => a + b)
-                    const getHarga = filterDiskon.map((menu) => menu.harga).reduce((a, b) => a + b)
-                    if(getDiskon != 0) {
-                        const totalDiskon = (getHarga * getDiskon) / 100
-                        setDiskon(totalDiskon.toLocaleString("id-ID"))
-    
-                        const intDiskon =  parseFloat(totalDiskon.toString().replace(".", "").replace(",", "."));
-                        const totalSemua = subtotal + pajak - intDiskon;
-                        setTotal(totalSemua.toLocaleString("id-ID"))
-                        return 
-                    }
+            if (filterDiskon.length != 0) {
+                const getDiskon = getHargaDiskon.reduce((a, b) => a + b)
+                const getHarga = filterDiskon.map((menu) => menu.harga).reduce((a, b) => a + b)
+                if (getDiskon != 0) {
+                    const totalDiskon = (getHarga * getDiskon) / 100
+                    editDiskon(totalDiskon.toLocaleString("id-ID"))
+
+                    const intDiskon = parseFloat(totalDiskon.toString().replace(".", "").replace(",", "."));
+                    const totalSemua = subtotal + pajak - intDiskon;
+                    editTotal(totalSemua.toLocaleString("id-ID"))
+                    return
                 }
-                const totalSemua = subtotal + pajak;
-                setTotal(totalSemua.toLocaleString("id-ID"))
-            } 
-            // console.log({subTotal, pajak, diskon, total});
+            } else {
+                editDiskon(0)
+            }
+            const totalSemua = subtotal + pajak;
+            editTotal(totalSemua.toLocaleString("id-ID"))
         }
 
-    }, [keranjang, pajak, subTotal, tambahanHarga, statusTambahan, penguranganHarga])
+    }, [keranjang, tambahanHarga, statusTambahan, penguranganHarga, editSubTotal, editDiskon, editPajak, editTotal, getHarga, getHargaDiskon])
 
     function deleteKeranjang(menu) {
-        const currentSubTotal = parseFloat(subTotal.toString().replace(".", "").replace(",", "."));
-        const kurangSubTotal = currentSubTotal - menu.harga
-        const pajak = kurangSubTotal / 10
-        const total = kurangSubTotal + pajak
-        setSubTotal(kurangSubTotal.toLocaleString("id-ID"))
-        setPajak(pajak.toLocaleString("id-ID"))
-        setTotal(total.toLocaleString("id-ID"))
 
-        if(kurangSubTotal == 0) {
-            setDiskon(0)
+        if (keranjang.length == 1) {
+            editSubTotal(0)
+            editPajak(0)
+            editDiskon(0)
+            editTotal(0)
         }
 
         const newCart = keranjang.filter((data) => {
             return data != menu
         })
         editKeranjang(newCart)
+
+        if (menu.total > 1) {
+            const sortHarga = getHarga.sort()
+            const startIndex = sortHarga.indexOf(menu.harga)
+            if (startIndex != -1) {
+                getHarga.splice(startIndex, menu.total)
+            }
+
+            if (menu.diskon != 0) {
+                const sortDiskon = getHargaDiskon.sort()
+                const startIndex = sortDiskon.indexOf(menu.diskon)
+                if (startIndex != -1) {
+                    getHargaDiskon.splice(startIndex, menu.total)
+                }
+            }
+        }
+
+        if (menu.total == 1) {
+            const indexToRemove = getHarga.indexOf(menu.harga);
+            if (indexToRemove != -1) {
+                const newArray = [...getHarga.slice(0, indexToRemove), ...getHarga.slice(indexToRemove + 1)];
+                editGetHarga(newArray)
+            }
+        }
 
     }
 
@@ -94,23 +113,21 @@ export default function Cart() {
             setTimeout(() => {
                 setIsAlert(false)
                 editKeranjang([])
-                setSubTotal(0)
-                setPajak(0)
-                setTotal(0)
-                setDiskon(0)
+                editSubTotal(0)
+                editPajak(0)
+                editDiskon(0)
+                editTotal(0)
                 editStatusTambahan('')
+                editGetHarga([])
+                editGetHargaDiskon([])
             }, 2000)
         }
 
     }
 
     function updateItem(menu, aksi) {
-        if(menu.total == 0) {
-            if(aksi == 'kurang') {
-                const filteredkeranjang = keranjang.filter((data) => {
-                    return data != menu
-                })
-                editKeranjang(filteredkeranjang)
+        if (menu.total == 1) {
+            if (aksi == 'kurang') {
                 return
             }
         }
@@ -123,32 +140,29 @@ export default function Cart() {
         })
 
         const newKeranjang = [...keranjang]
-        const currentSubTotal = parseFloat(subTotal.toString().replace(".", "").replace(",", "."));
-        const currentDiskon = parseFloat(diskon.toString().replace(".", "").replace(",", "."));
-        const getDiskon = (menu.harga * menu.diskon) / 100
 
         if (aksi == 'tambah') {
+            if (menu.diskon != 0) {
+                editGetHargaDiskon([menu.diskon, ...getHargaDiskon])
+            }
             newKeranjang[filterIndex] = itemPlus
-            const tambahSubTotal = currentSubTotal + menu.harga
-            const updatePajak = tambahSubTotal / 10
-            const updatedDiskon = currentDiskon + getDiskon
-            const updateTotal = tambahSubTotal + updatePajak - updatedDiskon
-            setSubTotal(tambahSubTotal.toLocaleString("id-ID"))
-            editSubTotal(tambahSubTotal)
-            setPajak(updatePajak.toLocaleString("id-ID"))
-            setDiskon(updatedDiskon.toLocaleString("id-ID"))
-            setTotal(updateTotal.toLocaleString("id-ID"))
             editStatusTambahan('tambah')
+            editGetHarga([menu.harga, ...getHarga])
         } else {
             newKeranjang[filterIndex] = itemMin
-            const kurangSubTotal = currentSubTotal - menu.harga
-            const updatePajak = kurangSubTotal / 10
-            const updatedDiskon = currentDiskon - getDiskon
-            const updateTotal = kurangSubTotal + updatePajak - updatedDiskon
-            setSubTotal(kurangSubTotal.toLocaleString("id-ID"))
-            setPajak(updatePajak.toLocaleString("id-ID"))
-            setDiskon(updatedDiskon.toLocaleString("id-ID"))
-            setTotal(updateTotal.toLocaleString("id-ID"))
+            const indexToRemove = getHarga.indexOf(menu.harga);
+            if (indexToRemove != -1) {
+                const newArray = [...getHarga.slice(0, indexToRemove), ...getHarga.slice(indexToRemove + 1)];
+                editGetHarga(newArray)
+            }
+
+            if (menu.diskon != 0) {
+                const indexToRemoveDiskon = getHargaDiskon.indexOf(menu.diskon);
+                if (indexToRemoveDiskon != -1) {
+                    const newArray = [...getHargaDiskon.slice(0, indexToRemoveDiskon), ...getHargaDiskon.slice(indexToRemoveDiskon + 1)];
+                    editGetHargaDiskon(newArray)
+                }
+            }
             editStatusTambahan('kurang')
         }
         editKeranjang(newKeranjang)
@@ -159,7 +173,7 @@ export default function Cart() {
     return (
         <div className="w-full p-2 relative">
             <div className="w-[90%] m-auto h-max bg-black z-40 rounded-xl left-0 fixed" id={isAlert ? 'alert-open' : 'alert-close'}>
-                {Alert(`✔ Anda Membayar Sebesar ${total.toLocaleString('id-ID')}`, 'text-[green]')}
+                {Alert(`✔ Anda Membayar Sebesar ${getTotal.toLocaleString('id-ID')}`, 'text-[white]')}
             </div>
             <div className="w-full">
                 <div className="">
@@ -197,7 +211,7 @@ export default function Cart() {
                     })}
                 </div>
             </div>
-            <div className="fixed w-full h-[300px] z-10 bottom-0 left-0 p-2 flex flex-col gap-3">
+            <div className="fixed w-full h-[300px] z-10 bottom-0 left-0 p-2 flex flex-col gap-2">
                 <div className="">
                     <p className="font-semibold">Ringkasan</p>
                 </div>
@@ -209,20 +223,23 @@ export default function Cart() {
                         <p className="font-semibold">Total</p>
                     </div>
                     <div className="text-[.9rem] flex flex-col gap-2">
-                        <p className="text-gray-400">Rp {subTotal}</p>
-                        <p className="text-gray-400">Rp {pajak}</p>
-                        <p className="text-[crimson]">Rp {diskon}</p>
-                        <p className="text-green-500 font-semibold">Rp {total}</p>
+                        <p className="text-gray-400">Rp {getSubTotal.toLocaleString('id-ID')}</p>
+                        <p className="text-gray-400">Rp {getPajak}</p>
+                        <p className="text-[crimson]">Rp {getDiskon}</p>
+                        <p className="text-green-500 font-semibold">Rp {getTotal}</p>
                     </div>
                 </div>
                 <div className="">
                     <p className="font-semibold">Metode Pembayaran</p>
                 </div>
                 <div className="w-full h-[70px]  rounded-xl flex justify-between">
-                    <button className="w-[20%] border-b h-full rounded-xl focus:bg-[#50cc50]">Gopay</button>
-                    <button className="w-[20%] border-b h-full rounded-xl focus:bg-[#00ccff]">Dana</button>
-                    <button className="w-[20%] border-b h-full rounded-xl focus:bg-[orange]">Shopee</button>
-                    <button className="w-[20%] border-b h-full rounded-xl focus:bg-[#cc82ee]">Ovo</button>
+                    {metodePembayaran.map((item, i) => {
+                        return (
+                            <button className="w-[20%] border-b h-[50px] rounded-xl overflow-hidden focus:-translate-y-2 duration-300"  key={i}>
+                                <img src={item.urlImg} id={item.id}/>
+                            </button>
+                        )
+                    })}
                 </div>
                 <div className="w-full flex justify-center">
                     <button className="w-[80%] m-auto text-center bg-black text-white py-2 rounded-full" onClick={bayarBelanja}>Bayar</button>

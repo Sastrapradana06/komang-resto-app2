@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppStore } from '../../store/app-store'
 import Logo from './logo.svg'
 import { shallow } from 'zustand/shallow'
 import { Link } from 'react-router-dom'
+import Footer from '../components/footer'
 
 
 export default function Home() {
@@ -10,10 +11,10 @@ export default function Home() {
     const [nomorMeja, setNomorMeja] = useState('')
     const [isInput, setIsInput] = useState(true)
     const [getDataUser, setIsInputUser] = useAppStore((state) => [state.getDataUser, state.setIsInputUser], shallow)
-    // console.log(dataUser);
+
 
     function getUser() {
-        if(userName && nomorMeja) {
+        if (userName && nomorMeja) {
             const dataUser = { userName, nomorMeja }
             getDataUser(dataUser)
             setIsInputUser(true)
@@ -27,7 +28,7 @@ export default function Home() {
 
 
     return (
-        <div className="w-full flex flex-col gap-6 p-1 h-[100vh]">
+        <div className="w-full flex flex-col gap-6 p-1 h-[100vh] relative">
             <div className='mt-6 w-[100%] flex justify-center'>
                 <img src={Logo} alt="" className='w-[50px] fill-[crimson] animate-pulse' />
             </div>
@@ -42,7 +43,7 @@ export default function Home() {
             </div>
             <div className="w-full  flex flex-col gap-4 p-2 ">
                 <div className="flex flex-col gap-1  text-[.9rem]">
-                    <label htmlFor="">Name Anda</label>
+                    <label htmlFor="">Nama Anda</label>
                     <input
                         type="text"
                         className='py-3 px-2 rounded-lg'
@@ -71,6 +72,7 @@ export default function Home() {
                     // alert('yyy')
                 )}
             </div>
+            <Footer />
         </div>
     )
 }

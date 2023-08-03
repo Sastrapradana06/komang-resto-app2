@@ -3,7 +3,7 @@ import { useAppStore } from '../../store/app-store'
 import { useEffect } from 'react';
 
 export default function SemuaMenu() {
-    const [semuaMenu, editSemuaMenu, menuSeafood, ayam, nasiGoreng, snack, coffe, softDrinks, jusTea, keranjang, editKeranjang, setAlert, dataUser, editStatusTambahan] = useAppStore((state) => [
+    const [semuaMenu, editSemuaMenu, menuSeafood, ayam, nasiGoreng, snack, coffe, softDrinks, jusTea, keranjang, editKeranjang, setAlert, dataUser, editStatusTambahan, editGetHarga, getHarga] = useAppStore((state) => [
         state.semuaMenu,
         state.editSemuaMenu,
         state.menuSeafood,
@@ -17,11 +17,13 @@ export default function SemuaMenu() {
         state.editKeranjang,
         state.setAlert,
         state.dataUser,
-        state.editStatusTambahan
+        state.editStatusTambahan,
+        state.editGetHarga,
+        state.getHarga
     ], shallow)
 
+
     useEffect(() => {
-        editStatusTambahan('')
         editSemuaMenu(menuSeafood)
     }, [editSemuaMenu, menuSeafood, editStatusTambahan])
 
@@ -45,6 +47,7 @@ export default function SemuaMenu() {
             }, ...keranjang
         ]
         editKeranjang(newMenu)
+        editGetHarga([menu.harga, ...getHarga])
         // editStatusTambahan('')
     }
 
@@ -61,7 +64,7 @@ export default function SemuaMenu() {
                 <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(nasiGoreng)}>Nasi Goreng</button>
                 <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(snack)}>Snack</button>
                 <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(coffe)}>Coffee</button>
-                <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(softDrinks)}>Soft Drinks</button>
+                <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(softDrinks)}>Non Coffe</button>
                 <button className="flex-none font-semibold border-b hover:bg-black hover:text-[#f4f4f4] duration-200 text-[.8rem] px-4 py-1 rounded-xl" onClick={() => editSemuaMenu(jusTea)}>Jus / Tea</button>
             </div>
             <div className="w-full flex flex-wrap p-2 justify-center gap-2 mb-16">

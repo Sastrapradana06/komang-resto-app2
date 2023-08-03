@@ -111,3 +111,39 @@ input {
         bottom: 1.2rem;
     }
 }
+
+#gopay, #dana, #shopee, #ovo {
+    object-fit: cover;
+    width: 70px;
+    height: 50px;
+}
+
+#footer-open {
+    position: absolute;
+    bottom: 1px;
+    animation: animateFooterOpen .5s forwards ease-out;
+}
+
+#footer-close {
+    position: absolute;
+    bottom: 1px;
+    animation: animateFooterClose .5s forwards ease-in;
+}
+
+@keyframes animateFooterOpen {
+    0% {
+        left: -500px;
+    }
+    100% {
+        left: 0;
+    }
+}
+@keyframes animateFooterClose {
+    0% {
+        left: 0px;
+    }
+    100% {
+        left: 500px;
+        opacity: 0;
+    }
+}

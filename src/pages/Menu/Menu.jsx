@@ -8,8 +8,9 @@ import { shallow } from 'zustand/shallow'
 import Alert from "../components/alert";
 
 export default function Menu() {
-    const [dataUser, isInputUser, keranjang, alert] = useAppStore((state) => [state.dataUser, state.isInputUser, state.keranjang, state.alert], shallow)
-    // console.log({alert});
+    const [dataUser, isInputUser, keranjang, alert] = useAppStore((state) => [state.dataUser, state.isInputUser, state.keranjang, state.alert,], shallow);
+
+
     return (
         <div className="w-full flex flex-col gap-4 font-semibold relative">
             <div className="w-full mt-5 flex flex-col gap-1 p-2">
