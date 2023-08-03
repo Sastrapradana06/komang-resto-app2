@@ -30,8 +30,6 @@ export default function Cart() {
         state.metodePembayaran
     ], shallow)
 
-    console.log({metodePembayaran});
-
 
     useEffect(() => {
         if (getHarga.length != 0) {

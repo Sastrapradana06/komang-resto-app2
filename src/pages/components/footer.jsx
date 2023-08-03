@@ -1,12 +1,8 @@
 
 import { AiOutlineCopyrightCircle } from "react-icons/ai";
-import { useAppStore } from "../../store/app-store";
-import { shallow } from "zustand/shallow";
 import { useEffect, useState } from "react";
 export default function Footer() {
     const [isFooter, setIsFooter] = useState(true)
-    // const [isFooter, editIsFooter] = useAppStore((state) => [state.isFooter, state.editIsFooter], shallow)
-    console.log(isFooter);
     useEffect(() => {
         setTimeout(() => {
             setIsFooter(false)
