@@ -22,7 +22,6 @@ export default function SemuaMenu() {
         state.getHarga
     ], shallow)
 
-
     useEffect(() => {
         editSemuaMenu(menuSeafood)
     }, [editSemuaMenu, menuSeafood, editStatusTambahan])
@@ -36,22 +35,29 @@ export default function SemuaMenu() {
             }, 2000)
             return false
         } 
-        const newMenu = [
-            {
-                namaMakanan: menu.namaMakanan,
-                image: menu.image,
-                tersedia: menu.tersedia,
-                diskon: 0,
-                harga: menu.harga,
-                total: 1
-            }, ...keranjang
-        ]
-        editKeranjang(newMenu)
-        editGetHarga([menu.harga, ...getHarga])
-        // editStatusTambahan('')
-    }
 
-    // console.log({menuSeafood, semuaMenu});
+        const filteredKeranjang = keranjang.filter((item) => {
+            return item.namaMakanan ==  menu.namaMakanan
+        })
+
+        if(filteredKeranjang.length == 0) {
+            const newMenu = [
+                {
+                    namaMakanan: menu.namaMakanan,
+                    image: menu.image,
+                    tersedia: menu.tersedia,
+                    diskon: 0,
+                    harga: menu.harga,
+                    total: 1
+                }, ...keranjang
+            ]
+            editKeranjang(newMenu)
+            editGetHarga([menu.harga, ...getHarga])
+        } else {
+            alert('sudah ada')
+        }
+
+    }
 
     return (
         <div className="w-full p-2 flex flex-col gap-2">

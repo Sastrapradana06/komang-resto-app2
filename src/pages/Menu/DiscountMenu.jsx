@@ -60,20 +60,29 @@ export default function DiscountMenu() {
             return false
         }
 
-        const newMenu = [
-            {
-                namaMakanan: menu.namaMakanan,
-                image: menu.image,
-                tersedia: menu.tersedia,
-                diskon: menu.diskon,
-                harga: menu.harga,
-                total: 1
-            }, ...keranjang
-        ]
-        // console.log(newMenu);
-        editKeranjang(newMenu)
-        editGetHarga([menu.harga, ...getHarga])
-        editGetHargaDiskon([menu.diskon, ...getHargaDiskon])
+        const filteredKeranjang = keranjang.filter((item) => {
+            return item.namaMakanan ==  menu.namaMakanan
+        })
+
+        if(filteredKeranjang.length == 0) {
+            const newMenu = [
+                {
+                    namaMakanan: menu.namaMakanan,
+                    image: menu.image,
+                    tersedia: menu.tersedia,
+                    diskon: menu.diskon,
+                    harga: menu.harga,
+                    total: 1
+                }, ...keranjang
+            ]
+    
+            editKeranjang(newMenu)
+            editGetHarga([menu.harga, ...getHarga])
+            editGetHargaDiskon([menu.diskon, ...getHargaDiskon])
+        } else {
+            alert('sudah ada')
+        }
+
     }
 
     return (
